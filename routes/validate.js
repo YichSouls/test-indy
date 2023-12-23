@@ -48,14 +48,10 @@ function validatePromocode(promocode, arguments) {
         .then(response => response.json())
         .then(data => {
           //console.log(data);
+          // Check if the weather is clear
           const weather = data.weather[0].main;
 
-          // Check if the weather is sunny
-          if (weather === 'Clear') {
-            return true;
-          } else {
-            return false;
-          }
+          
         })
     })
 
