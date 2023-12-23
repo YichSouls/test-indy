@@ -28,8 +28,37 @@ router.post('/', (req, res) => {
 });
 
 function validatePromocode(promocode, arguments) {
-  // Implement your validation logic here
-  return true;
+  // Api key
+  const apiKey = 'd0562f476913da692a065c608d0539f6';
+
+  // Get the lat and lon for the city
+  const town = arguments.meteo.town;
+
+  fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${town}&appid=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      //console.log(data);
+      const lat = data[0].lat;
+      const lon = data[0].lon;
+
+      console.log(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+
+      // Get the weather for the city
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+          //console.log(data);
+          const weather = data.weather[0].main;
+
+          // Check if the weather is sunny
+          if (weather === 'Clear') {
+            return true;
+          } else {
+            return false;
+          }
+        })
+    })
+
 }
 
 module.exports = router;
